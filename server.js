@@ -22,7 +22,7 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({origin: ["https://job-tracker-sand-omega.vercel.app/", "http://localhost:5173"], credentials:true, methods:["GET", "PUT", "POST", "DELETE", "PATCH"]}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Routes
