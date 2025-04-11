@@ -25,6 +25,27 @@ const app = express();
 app.use(cors({origin: ["https://job-tracker-sand-omega.vercel.app/", "http://localhost:5173"], credentials:true, methods:["GET", "PUT", "POST", "DELETE", "PATCH"]}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  // Replace with your Vercel frontend URL
+  const allowedOrigins = ["https://job-tracker-sand-omega.vercel.app/", "http://localhost:5173"];
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});
 // Routes
 app.use("/jobs", jobRoutes);
 
